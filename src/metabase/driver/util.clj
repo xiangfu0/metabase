@@ -557,6 +557,8 @@
     "mongo"
     "mysql"
     "oracle"
+    "pinot"
+    "pinot-jdbc"
     "postgres"
     "presto-jdbc"
     "redshift"

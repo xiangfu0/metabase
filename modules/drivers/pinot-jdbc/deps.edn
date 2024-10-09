@@ -1,0 +1,7 @@
+{:paths
+ ["src" "resources"]
+
+ :deps
+ {;; JDBC java driver used for executing queries on Pinot.
+  ;; Reference: https://docs.pinot.apache.org/users/clients/jdbc
+  org.apache.pinot/pinot-jdbc-client  {:mvn/version "1.2.0"}}}

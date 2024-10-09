@@ -1,0 +1,33 @@
+info:
+  name: Metabase Pinot JDBC Driver
+  version: 1.0.0-SNAPSHOT
+  description: Allows Metabase to connect to Pinot databases using JDBC.
+driver:
+  name: pinot-jdbc
+  display-name: Pinot JDBC
+  lazy-load: true
+  parent: sql-jdbc
+  connection-properties:
+    - host
+    - merge:
+        - port
+        - display-name: Controller node port
+          default: 9000
+    - name: brokers
+      display-name: Brokers endpoint
+      placeholder: localhost:8000
+      required: true
+    - advanced-options-start
+    - name: json-unfolding
+      display-name: Allow unfolding of JSON columns
+      type: boolean
+      visible-if:
+        advanced-options: true
+      description: This enables unfolding JSON columns into their component fields.
+      default: true
+    - default-advanced-options
+init:
+  - step: load-namespace
+    namespace: metabase.driver.pinot-jdbc
+  - step: register-jdbc-driver
+    class: org.apache.pinot.client.PinotDriver

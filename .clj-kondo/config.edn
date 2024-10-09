@@ -155,6 +155,8 @@
               :hive-like
               :mongo
               :oracle
+              :pinot
+              :pinot-jdbc
               :presto-jdbc
               :redshift
               :snowflake
