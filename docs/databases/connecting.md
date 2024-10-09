@@ -31,6 +31,7 @@ The databases listed below have official drivers maintained by the Metabase team
 - [MariaDB](./connections/mariadb.md)
 - [MySQL](./connections/mysql.md)
 - [Oracle](./connections/oracle.md)
+- [Pinot](./connections/pinot.md)
 - [PostgreSQL](./connections/postgresql.md)
 - [Presto](./connections/presto.md)
 - [Redshift (Amazon Web Services)](./connections/redshift.md)

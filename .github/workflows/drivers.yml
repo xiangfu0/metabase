@@ -3,8 +3,8 @@ name: Driver Tests
 on:
   push:
     branches:
-      - 'master'
-      - 'release-**'
+      - "master"
+      - "release-**"
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
 
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: athena
       MB_ATHENA_TEST_REGION: us-east-1
       MB_ATHENA_TEST_ACCESS_KEY: ${{ secrets.MB_ATHENA_TEST_ACCESS_KEY }}
@@ -44,24 +44,24 @@ jobs:
       MB_ATHENA_TEST_WITHOUT_GET_TABLE_METADATA_ACCESS_KEY: ${{ secrets.MB_ATHENA_TEST_WITHOUT_GET_TABLE_METADATA_ACCESS_KEY }}
       MB_ATHENA_TEST_WITHOUT_GET_TABLE_METADATA_SECRET_KEY: ${{ secrets.MB_ATHENA_TEST_WITHOUT_GET_TABLE_METADATA_SECRET_KEY }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Athena driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-athena-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Athena driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-athena-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-bigquery-cloud-sdk-ee:
     needs: files-changed
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: bigquery-cloud-sdk
       MB_BIGQUERY_TEST_PROJECT_ID: ${{ secrets.BIGQUERY_TEST_PROJECT_ID }}
       MB_BIGQUERY_TEST_CLIENT_ID: ${{ secrets.MB_BIGQUERY_TEST_CLIENT_ID }}
@@ -78,24 +78,24 @@ jobs:
       MB_BIGQUERY_TEST_REFRESH_TOKEN: ${{ secrets.MB_BIGQUERY_TEST_REFRESH_TOKEN }}
       MB_BIGQUERY_CLOUD_SDK_TEST_SERVICE_ACCOUNT_JSON: ${{ secrets.MB_BIGQUERY_CLOUD_SDK_TEST_SERVICE_ACCOUNT_JSON }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Test BigQuery Cloud SDK driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-bigquery-cloud-sdk-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test BigQuery Cloud SDK driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-bigquery-cloud-sdk-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-druid-ee:
     needs: files-changed
@@ -103,7 +103,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: druid
     services:
       druid:
@@ -113,24 +113,24 @@ jobs:
         env:
           CLUSTER_SIZE: nano-quickstart
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Druid driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-druid-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Druid driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-druid-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-databricks-ee:
     needs: files-changed
@@ -138,30 +138,30 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: databricks
       MB_DATABRICKS_TEST_HOST: ${{ secrets.MB_DATABRICKS_JDBC_TEST_HOST }}
       MB_DATABRICKS_TEST_HTTP_PATH: ${{ secrets.MB_DATABRICKS_JDBC_TEST_HTTP_PATH }}
       MB_DATABRICKS_TEST_TOKEN: ${{ secrets.MB_DATABRICKS_JDBC_TEST_TOKEN }}
-      MB_DATABRICKS_TEST_CATALOG: 'metabase_ci'
+      MB_DATABRICKS_TEST_CATALOG: "metabase_ci"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Databricks driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-databricks-ee'
-        test-args: ":exclude-tags '[:mb/once]'"
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Databricks driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-databricks-ee"
+          test-args: ":exclude-tags '[:mb/once]'"
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-druid-jdbc-ee:
     needs: files-changed
@@ -169,7 +169,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: druid-jdbc
     services:
       druid:
@@ -179,24 +179,24 @@ jobs:
         env:
           CLUSTER_SIZE: nano-quickstart
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Druid JDBC driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-druid-jdbc-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Druid JDBC driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-druid-jdbc-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mariadb-10-2-ee:
     needs: files-changed
@@ -208,7 +208,7 @@ jobs:
       matrix:
         partition-index: [0, 1, 2, 3]
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mysql
       MB_DB_TYPE: mysql
       MB_DB_HOST: localhost
@@ -222,25 +222,25 @@ jobs:
         ports:
           - "3306:3306"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MariaDB driver (10.2)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mariadb-10-2-ee'
-        test-args: >-
-          :partition/total 4
-          :partition/index ${{ matrix.partition-index }}
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MariaDB driver (10.2)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mariadb-10-2-ee"
+          test-args: >-
+            :partition/total 4
+            :partition/index ${{ matrix.partition-index }}
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mariadb-latest-ee:
     needs: files-changed
@@ -252,7 +252,7 @@ jobs:
       matrix:
         partition-index: [0, 1, 2, 3]
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mysql
       MB_DB_TYPE: mysql
       MB_DB_HOST: localhost
@@ -266,25 +266,25 @@ jobs:
         ports:
           - "3306:3306"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MariaDB driver (latest)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mariadb-latest-ee'
-        test-args: >-
-          :partition/total 4
-          :partition/index ${{ matrix.partition-index }}
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MariaDB driver (latest)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mariadb-latest-ee"
+          test-args: >-
+            :partition/total 4
+            :partition/index ${{ matrix.partition-index }}
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mongo-4-4-ee:
     needs: files-changed
@@ -292,7 +292,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mongo
       MB_MONGO_TEST_USER: metabase
       MB_MONGO_TEST_PASSWORD: metasample123
@@ -302,25 +302,25 @@ jobs:
         ports:
           - "27017:27017"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MongoDB driver (4.4)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mongo-4-4-ee'
-        test-args: >-
-          :exclude-tags [:mongo-sharded-cluster-tests]
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MongoDB driver (4.4)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mongo-4-4-ee"
+          test-args: >-
+            :exclude-tags [:mongo-sharded-cluster-tests]
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mongo-4-4-ssl-ee:
     needs: files-changed
@@ -328,7 +328,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mongo
       MB_MONGO_TEST_USER: metabase
       MB_MONGO_TEST_PASSWORD: metasample123
@@ -363,7 +363,7 @@ jobs:
       - name: Test MongoDB SSL driver (4.4)
         uses: ./.github/actions/test-driver
         with:
-          junit-name: 'be-tests-mongo-4-4-ee'
+          junit-name: "be-tests-mongo-4-4-ee"
           test-args: >-
             :exclude-tags [:mongo-sharded-cluster-tests]
             :only-tags [:mb/driver-tests]
@@ -385,7 +385,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mongo
       MB_MONGO_TEST_USER: metabase
       MB_MONGO_TEST_PASSWORD: metasample123
@@ -395,25 +395,25 @@ jobs:
         ports:
           - "27017:27017"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MongoDB driver (5.0)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mongo-5-0-ee'
-        test-args: >-
-          :exclude-tags [:mongo-sharded-cluster-tests]
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MongoDB driver (5.0)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mongo-5-0-ee"
+          test-args: >-
+            :exclude-tags [:mongo-sharded-cluster-tests]
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mongo-5-0-ssl-ee:
     needs: files-changed
@@ -421,56 +421,56 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mongo
       MB_MONGO_TEST_USER: metabase
       MB_MONGO_TEST_PASSWORD: metasample123
       MB_TEST_MONGO_REQUIRES_SSL: true
     steps:
-    - uses: actions/checkout@v4
-    - name: Spin up Mongo docker container
-      run: >-
-        docker run -d
-        -p 27017:27017
-        --name metamongo
-        metabase/qa-databases:mongo-sample-5.0
-        mongod
-        --dbpath /data/db2/
-        --tlsMode requireTLS
-        --tlsCertificateKeyFile /etc/mongo/metamongo.pem
-        --tlsCAFile /etc/mongo/metaca.crt
-    - uses: ./.github/actions/await-port
-      with:
-        port: 27017
-      timeout-minutes: 5
-    - name: Make SSL certificates for Mongo available
-      run: |
-        curl https://raw.githubusercontent.com/metabase/metabase-qa/master/dbs/mongo/certificates/metabase.crt \
-        -o ./test_resources/ssl/mongo/metabase.crt
+      - uses: actions/checkout@v4
+      - name: Spin up Mongo docker container
+        run: >-
+          docker run -d
+          -p 27017:27017
+          --name metamongo
+          metabase/qa-databases:mongo-sample-5.0
+          mongod
+          --dbpath /data/db2/
+          --tlsMode requireTLS
+          --tlsCertificateKeyFile /etc/mongo/metamongo.pem
+          --tlsCAFile /etc/mongo/metaca.crt
+      - uses: ./.github/actions/await-port
+        with:
+          port: 27017
+        timeout-minutes: 5
+      - name: Make SSL certificates for Mongo available
+        run: |
+          curl https://raw.githubusercontent.com/metabase/metabase-qa/master/dbs/mongo/certificates/metabase.crt \
+          -o ./test_resources/ssl/mongo/metabase.crt
 
-        curl https://raw.githubusercontent.com/metabase/metabase-qa/master/dbs/mongo/certificates/metabase.key \
-        -o ./test_resources/ssl/mongo/metabase.key
+          curl https://raw.githubusercontent.com/metabase/metabase-qa/master/dbs/mongo/certificates/metabase.key \
+          -o ./test_resources/ssl/mongo/metabase.key
 
-        curl https://raw.githubusercontent.com/metabase/metabase-qa/master/dbs/mongo/certificates/metaca.crt \
-        -o ./test_resources/ssl/mongo/metaca.crt
-    - name: Test MongoDB SSL driver (5.0)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mongo-5-0-ee'
-        test-args: >-
-          :exclude-tags [:mongo-sharded-cluster-tests]
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+          curl https://raw.githubusercontent.com/metabase/metabase-qa/master/dbs/mongo/certificates/metaca.crt \
+          -o ./test_resources/ssl/mongo/metaca.crt
+      - name: Test MongoDB SSL driver (5.0)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mongo-5-0-ee"
+          test-args: >-
+            :exclude-tags [:mongo-sharded-cluster-tests]
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mongo-latest-ee:
     needs: files-changed
@@ -478,7 +478,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mongo
       MB_MONGO_TEST_USER: metabase
       MB_MONGO_TEST_PASSWORD: metasample123
@@ -491,25 +491,25 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: metabase
           MONGO_INITDB_ROOT_PASSWORD: metasample123
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MongoDB driver (latest)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mongo-latest-ee'
-        test-args: >-
-          :exclude-tags [:mongo-sharded-cluster-tests]
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MongoDB driver (latest)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mongo-latest-ee"
+          test-args: >-
+            :exclude-tags [:mongo-sharded-cluster-tests]
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mongo-sharded-cluster-ee:
     needs: files-changed
@@ -517,7 +517,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mongo
     services:
       mongodb:
@@ -525,23 +525,23 @@ jobs:
         ports:
           - "27017:17017"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MongoDB driver (Sharded cluster)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mongo-sharded-cluster-ee'
-        test-args: ':only "[metabase.driver.mongo.sharded-cluster-test]"'
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MongoDB driver (Sharded cluster)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mongo-sharded-cluster-ee"
+          test-args: ':only "[metabase.driver.mongo.sharded-cluster-test]"'
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mysql-8-0-ee:
     needs: files-changed
@@ -553,7 +553,7 @@ jobs:
       matrix:
         partition-index: [0, 1, 2, 3]
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mysql
       MB_DB_TYPE: mysql
       MB_DB_HOST: localhost
@@ -567,25 +567,25 @@ jobs:
         ports:
           - "3306:3306"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MySQL driver (8.0)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-mysql-8-0-ee'
-        test-args: >-
-          :partition/total 4
-          :partition/index ${{ matrix.partition-index }}
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MySQL driver (8.0)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-mysql-8-0-ee"
+          test-args: >-
+            :partition/total 4
+            :partition/index ${{ matrix.partition-index }}
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-mysql-latest-ee:
     needs: files-changed
@@ -597,7 +597,7 @@ jobs:
       matrix:
         partition-index: [0, 1, 2, 3]
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: mysql
       MB_DB_TYPE: mysql
       MB_DB_HOST: localhost
@@ -612,7 +612,7 @@ jobs:
       # the MYSQL_RDS_SSL_INSTANCE vars are defined as secrets and can be altered
       MB_MYSQL_SSL_TEST_HOST: ${{ secrets.MYSQL_RDS_SSL_INSTANCE_HOST }}
       MB_MYSQL_SSL_TEST_SSL: true
-      MB_MYSQL_SSL_TEST_ADDITIONAL_OPTIONS: 'verifyServerCertificate=true'
+      MB_MYSQL_SSL_TEST_ADDITIONAL_OPTIONS: "verifyServerCertificate=true"
       # the contents of the ./resources/certificates/rds-combined-ca-bundle.pem file
       MB_MYSQL_SSL_TEST_SSL_CERT: ${{ secrets.MB_MYSQL_SSL_TEST_SSL_CERT }}
       MB_MYSQL_SSL_TEST_USER: metabase
@@ -624,7 +624,7 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_DATABASE: circle_test
         ports:
-        - "3306:3306"
+          - "3306:3306"
     steps:
     - uses: actions/checkout@v4
     - name: Test MySQL driver (latest)
@@ -652,7 +652,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: oracle
       MB_ORACLE_TEST_HOST: localhost
       MB_ORACLE_TEST_USER: system
@@ -666,24 +666,24 @@ jobs:
         ports:
           - "1521:1521"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Oracle driver (18.4)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-oracle-18-4-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Oracle driver (18.4)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-oracle-18-4-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-oracle-21-3-ee:
     needs: files-changed
@@ -691,20 +691,20 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: oracle
       MB_ORACLE_TEST_HOST: localhost
       MB_ORACLE_TEST_PORT: 2484
       MB_ORACLE_TEST_SERVICE_NAME: XEPDB1
       MB_ORACLE_TEST_SSL: true
       MB_ORACLE_TEST_SSL_USE_TRUSTSTORE: true
-      MB_ORACLE_TEST_SSL_TRUSTSTORE_PATH: './test_resources/ssl/oracle/truststore.p12'
+      MB_ORACLE_TEST_SSL_TRUSTSTORE_PATH: "./test_resources/ssl/oracle/truststore.p12"
       MB_ORACLE_TEST_SSL_TRUSTSTORE_OPTIONS: local
-      MB_ORACLE_TEST_SSL_TRUSTSTORE_PASSWORD_VALUE: 'PassworD_#1234'
+      MB_ORACLE_TEST_SSL_TRUSTSTORE_PASSWORD_VALUE: "PassworD_#1234"
       MB_ORACLE_TEST_SSL_USE_KEYSTORE: true
-      MB_ORACLE_TEST_SSL_KEYSTORE_PATH: './test_resources/ssl/oracle/keystore.p12'
+      MB_ORACLE_TEST_SSL_KEYSTORE_PATH: "./test_resources/ssl/oracle/keystore.p12"
       MB_ORACLE_TEST_SSL_KEYSTORE_OPTIONS: local
-      MB_ORACLE_TEST_SSL_KEYSTORE_PASSWORD_VALUE: 'PassworD_#1234'
+      MB_ORACLE_TEST_SSL_KEYSTORE_PASSWORD_VALUE: "PassworD_#1234"
       MB_ORACLE_SSL_TEST_SSL: true
     services:
       oracle:
@@ -714,24 +714,24 @@ jobs:
         ports:
           - "2484:2484"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Oracle driver (21.3)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-oracle-21-3-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Oracle driver (21.3)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-oracle-21-3-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-postgres-ee:
     needs: files-changed
@@ -739,7 +739,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: postgres
       MB_DB_TYPE: postgres
       MB_DB_PORT: 5432
@@ -757,11 +757,11 @@ jobs:
           POSTGRES_DB: mb_test
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Postgres driver (12)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-postgres-ee'
+      - uses: actions/checkout@v4
+      - name: Test Postgres driver (12)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-postgres-ee"
 
   be-tests-postgres-latest-ee:
     needs: files-changed
@@ -769,7 +769,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: postgres
       MB_DB_TYPE: postgres
       MB_DB_PORT: 5432
@@ -779,7 +779,7 @@ jobs:
       MB_POSTGRESQL_TEST_USER: circle_test
       MB_POSTGRES_SSL_TEST_SSL: true
       MB_POSTGRES_SSL_TEST_SSL_MODE: verify-full
-      MB_POSTGRES_SSL_TEST_SSL_ROOT_CERT_PATH: 'test-resources/certificates/us-east-2-bundle.pem'
+      MB_POSTGRES_SSL_TEST_SSL_ROOT_CERT_PATH: "test-resources/certificates/us-east-2-bundle.pem"
     services:
       postgres:
         image: circleci/postgres:latest
@@ -790,22 +790,22 @@ jobs:
           POSTGRES_DB: circle_test
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Postgres driver (latest)
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-postgres-latest-ee'
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Postgres driver (latest)
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-postgres-latest-ee"
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-presto-jdbc-ee:
     needs: files-changed
@@ -813,7 +813,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: presto-jdbc
       MB_PRESTO_JDBC_TEST_CATALOG: test_data
       MB_PRESTO_JDBC_TEST_HOST: localhost
@@ -822,7 +822,7 @@ jobs:
       MB_PRESTO_JDBC_TEST_USER: metabase
       MB_PRESTO_JDBC_TEST_PASSWORD: metabase
       MB_ENABLE_PRESTO_JDBC_DRIVER: true
-      MB_PRESTO_JDBC_TEST_ADDITIONAL_OPTIONS: 'SSLTrustStorePath=/tmp/cacerts-with-presto-ssl.jks&SSLTrustStorePassword=changeit'
+      MB_PRESTO_JDBC_TEST_ADDITIONAL_OPTIONS: "SSLTrustStorePath=/tmp/cacerts-with-presto-ssl.jks&SSLTrustStorePassword=changeit"
     services:
       presto:
         image: metabase/presto-mb-ci:latest # version 0.254
@@ -831,49 +831,49 @@ jobs:
         env:
           JAVA_TOOL_OPTIONS: "-Xmx2g"
     steps:
-    - uses: actions/checkout@v4
-    - uses: ./.github/actions/await-port
-      with:
-         port: ${{ env.MB_PRESTO_JDBC_TEST_PORT }}
-      timeout-minutes: 5
-    - name: Create temp cacerts file based on bundled JDK one
-      run: cp $JAVA_HOME/lib/security/cacerts /tmp/cacerts-with-presto-ssl.jks
-    - name: Capture Presto server self signed CA
-      run: |
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/await-port
+        with:
+          port: ${{ env.MB_PRESTO_JDBC_TEST_PORT }}
+        timeout-minutes: 5
+      - name: Create temp cacerts file based on bundled JDK one
+        run: cp $JAVA_HOME/lib/security/cacerts /tmp/cacerts-with-presto-ssl.jks
+      - name: Capture Presto server self signed CA
+        run: |
           while [[ ! -s /tmp/presto-ssl-ca.pem ]]; do
             echo "Waiting to capture SSL CA" \
               && openssl s_client -connect localhost:8443 2>/dev/null </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/presto-ssl-ca.pem \
               && sleep 1;
           done
-    - name: Convert Presto CA from PEM to DER
-      run: openssl x509 -outform der -in /tmp/presto-ssl-ca.pem -out /tmp/presto-ssl-ca.der
-    - name: Add write permission on cacerts file
-      run: chmod u+w /tmp/cacerts-with-presto-ssl.jks
-    - name: Import Presto CA into temp cacerts file
-      run: >-
-        keytool -noprompt -import
-        -alias presto
-        -keystore /tmp/cacerts-with-presto-ssl.jks
-        -storepass changeit
-        -file /tmp/presto-ssl-ca.der
-        -trustcacerts
-    - name: Test Presto JDBC driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-presto-jdbc-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - name: Convert Presto CA from PEM to DER
+        run: openssl x509 -outform der -in /tmp/presto-ssl-ca.pem -out /tmp/presto-ssl-ca.der
+      - name: Add write permission on cacerts file
+        run: chmod u+w /tmp/cacerts-with-presto-ssl.jks
+      - name: Import Presto CA into temp cacerts file
+        run: >-
+          keytool -noprompt -import
+          -alias presto
+          -keystore /tmp/cacerts-with-presto-ssl.jks
+          -storepass changeit
+          -file /tmp/presto-ssl-ca.der
+          -trustcacerts
+      - name: Test Presto JDBC driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-presto-jdbc-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-redshift-ee:
     needs: files-changed
@@ -881,31 +881,31 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: redshift
       MB_REDSHIFT_TEST_USER: metabase_ci
       MB_REDSHIFT_TEST_DB: testdb
       MB_REDSHIFT_TEST_HOST: ${{ secrets.MB_REDSHIFT_TEST_HOST }}
       MB_REDSHIFT_TEST_PASSWORD: ${{ secrets.MB_REDSHIFT_TEST_PASSWORD }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Redshift driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-redshift-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Redshift driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-redshift-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-snowflake-ee:
     needs: files-changed
@@ -913,7 +913,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: snowflake
       MB_SNOWFLAKE_TEST_USER: METABASE CI
       MB_SNOWFLAKE_TEST_ACCOUNT: ${{ secrets.MB_SNOWFLAKE_TEST_ACCOUNT }}
@@ -927,24 +927,24 @@ jobs:
       MB_SNOWFLAKE_TEST_RSA_ROLE_TEST_ROLE: RSA_ROLE_TEST_ROLE
       MB_SNOWFLAKE_TEST_RSA_ROLE_TEST_DB: RSA_ROLE_TEST_DB
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Snowflake driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-snowflake-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Snowflake driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-snowflake-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-sparksql-ee:
     needs: files-changed
@@ -952,7 +952,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: sparksql
     services:
       sparksql:
@@ -960,24 +960,24 @@ jobs:
         ports:
           - "10000:10000"
     steps:
-    - uses: actions/checkout@v4
-    - name: Test Spark driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-sparksql-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test Spark driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-sparksql-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-sqlite-ee:
     needs: files-changed
@@ -985,27 +985,27 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: sqlite
     steps:
-    - uses: actions/checkout@v4
-    - name: Test SQLite driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-sqlite-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test SQLite driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-sqlite-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-sqlserver-2017-ee:
     needs: files-changed
@@ -1013,10 +1013,10 @@ jobs:
     runs-on: ubuntu-20.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: sqlserver
       MB_SQLSERVER_TEST_HOST: localhost
-      MB_SQLSERVER_TEST_PASSWORD: 'P@ssw0rd'
+      MB_SQLSERVER_TEST_PASSWORD: "P@ssw0rd"
       MB_SQLSERVER_TEST_USER: SA
     services:
       sqlserver:
@@ -1025,27 +1025,27 @@ jobs:
           - "1433:1433"
         env:
           ACCEPT_EULA: Y
-          SA_PASSWORD: 'P@ssw0rd'
+          SA_PASSWORD: "P@ssw0rd"
           MSSQL_MEMORY_LIMIT_MB: 1024
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MS SQL Server 2017 driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-sqlserver-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MS SQL Server 2017 driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-sqlserver-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-sqlserver-2022-ee:
     needs: files-changed
@@ -1053,10 +1053,10 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: sqlserver
       MB_SQLSERVER_TEST_HOST: localhost
-      MB_SQLSERVER_TEST_PASSWORD: 'P@ssw0rd'
+      MB_SQLSERVER_TEST_PASSWORD: "P@ssw0rd"
       MB_SQLSERVER_TEST_USER: SA
     services:
       sqlserver:
@@ -1065,27 +1065,27 @@ jobs:
           - "1433:1433"
         env:
           ACCEPT_EULA: Y
-          SA_PASSWORD: 'P@ssw0rd'
+          SA_PASSWORD: "P@ssw0rd"
           MSSQL_MEMORY_LIMIT_MB: 1024
     steps:
-    - uses: actions/checkout@v4
-    - name: Test MS SQL Server 2022 driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-sqlserver-2022-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Test MS SQL Server 2022 driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-sqlserver-2022-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
 
   be-tests-vertica-ee:
     needs: files-changed
@@ -1093,7 +1093,7 @@ jobs:
     runs-on: ubuntu-22.04
     timeout-minutes: 90
     env:
-      CI: 'true'
+      CI: "true"
       DRIVERS: vertica
     services:
       vertica:
@@ -1101,23 +1101,23 @@ jobs:
         ports:
           - "5433:5433"
     steps:
-    - uses: actions/checkout@v4
-    - name: Make plugins directory
-      run: mkdir plugins
-    - name: Test Vertica driver
-      uses: ./.github/actions/test-driver
-      with:
-        junit-name: 'be-tests-vertica-ee'
-        test-args: >-
-          :only-tags [:mb/driver-tests]
-    - name: Upload Test Results
-      uses: ./.github/actions/upload-test-results
-      if: always()
-      with:
-        input-path: ./target/junit/
-        output-name: ${{ github.job }}
-        bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
-        aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.AWS_REGION }}
-        trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
+      - uses: actions/checkout@v4
+      - name: Make plugins directory
+        run: mkdir plugins
+      - name: Test Vertica driver
+        uses: ./.github/actions/test-driver
+        with:
+          junit-name: "be-tests-vertica-ee"
+          test-args: >-
+            :only-tags [:mb/driver-tests]
+      - name: Upload Test Results
+        uses: ./.github/actions/upload-test-results
+        if: always()
+        with:
+          input-path: ./target/junit/
+          output-name: ${{ github.job }}
+          bucket: ${{ vars.AWS_S3_TEST_RESULTS_BUCKET }}
+          aws-access-key-id: ${{ secrets.AWS_TEST_RESULTS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_TEST_RESULTS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+          trunk-api-token: ${{ secrets.TRUNK_API_TOKEN }}
