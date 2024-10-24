@@ -20,13 +20,18 @@ driver:
       type: boolean
       visible-if:
         advanced-options: true
-    - name: auth-username
-      display-name: Username
+    - name: auth-token-type
+      display-name: Auth Token Type
       type: string
+      options:
+        - name: Basic
+          value: basic
+        - name: Bearer
+          value: bearer
       visible-if:
         auth-enabled: true
-    - name: auth-token
-      display-name: Token
+    - name: auth-token-value
+      display-name: Auth Token
       type: secret
       secret-kind: password
       visible-if:

@@ -26,11 +26,14 @@
   [request-fn url & {:as options}]
   {:pre [(fn? request-fn) (string? url)]}
   ;; this is the way the `Content-Type` header is formatted in requests made by the Pinot web interface
-  (let [{:keys [auth-enabled auth-username auth-token-value]} options
-        options (cond-> (merge {:content-type "application/json;charset=UTF-8"} options)
-                  (:body options) (update :body json/generate-string)
-                  auth-enabled (assoc :basic-auth (str auth-username ":" auth-token-value)))]
+  (let [{:keys [auth-enabled auth-token-type auth-token-value]} options
+        ;; Construct headers map
+        headers (cond-> {"Content-Type" "application/json;charset=UTF-8"}
+                  auth-enabled (assoc "Authorization" (str auth-token-type " " auth-token-value)))
 
+        ;; Update options with headers and possibly serialize body if present
+        options (cond-> (merge options {:headers headers})
+                  (:body options) (update :body json/generate-string))]
     (try
       (let [{:keys [status body]} (request-fn url options)]
         (log/debugf "Pinot request url: %s, body: %s" url body)
@@ -70,12 +73,12 @@
       ;; Use the POST helper function to send the Pinot query
       (let [url (details->url details-with-tunnel "/sql")
             response (POST url
-                           :body query
-                           :auth-enabled (:auth-enabled details)
-                           :auth-username (:auth-username details)
-                           :auth-token-value (-> details
-                                                 (secret/db-details-prop->secret-map "auth-token")
-                                                 secret/value->string))]
+                       :body query
+                       :auth-enabled     (:auth-enabled details)
+                       :auth-token-type  (:auth-token-type details)
+                       :auth-token-value (-> details
+                                             (secret/db-details-prop->secret-map "auth-token-value")
+                                             secret/value->string))]
 
         ;; Logging query, details, and parsed response
         (log/debugf "Pinot details: %s, Pinot query: %s, Parsed Pinot response: %s" details query response)
@@ -106,11 +109,11 @@
       (try
         (log/debugf "Canceling Pinot query with ID %s" query-id)
         (DELETE (details->url details-with-tunnel (format "/pinot/v2/%s" query-id))
-                :auth-enabled     (:auth-enabled details)
-                :auth-username    (:auth-username details)
-                :auth-token-value (-> details
-                                      (secret/db-details-prop->secret-map "auth-token")
-                                      secret/value->string))
+          :auth-enabled  (:auth-enabled details)
+          :auth-token-type  (:auth-token-type details)
+          :auth-token-value (-> details
+                                (secret/db-details-prop->secret-map "auth-token-value")
+                                secret/value->string))
         (catch Exception cancel-e
           (log/warnf cancel-e "Failed to cancel Pinot query with queryId %s" query-id))))))
 

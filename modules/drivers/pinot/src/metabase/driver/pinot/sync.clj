@@ -21,11 +21,11 @@
   (ssh/with-ssh-tunnel [details-with-tunnel (:details database)]
     (let [request-path (str "/tables/" (table :name) "/schema")
           response (pinot.client/GET (pinot.client/details->url details-with-tunnel request-path)
-                                     :auth-enabled     (-> database :details :auth-enabled)
-                                     :auth-username    (-> database :details :auth-username)
-                                     :auth-token-value (-> (:details database)
-                                                           (secret/db-details-prop->secret-map "auth-token")
-                                                           secret/value->string))
+                     :auth-enabled        (-> database :details :auth-enabled)
+                     :auth-token-type     (-> database :details :auth-token-type)
+                     :auth-token-value    (-> (:details database)
+                                              (secret/db-details-prop->secret-map "auth-token-value")
+                                              secret/value->string))
           dimensions    (response :dimensionFieldSpecs)
           metrics       (response :metricFieldSpecs)
           time-columns  (response :dateTimeFieldSpecs)]
@@ -52,14 +52,15 @@
   {:pre [(map? (:details database))]}
   (ssh/with-ssh-tunnel [details-with-tunnel (:details database)]
     (let [response (pinot.client/GET (pinot.client/details->url details-with-tunnel "/tables")
-                                              :auth-enabled     (-> database :details :auth-enabled)
-                                              :auth-username    (-> database :details :auth-username)
-                                              :auth-token-value (-> (:details database)
-                                                                    (secret/db-details-prop->secret-map "auth-token")
-                                                                    secret/value->string))
+                     :auth-enabled     (-> database :details :auth-enabled)
+                     :auth-token-type    (-> database :details :auth-token-type)
+                     :auth-token-value (-> (:details database)
+                                           (secret/db-details-prop->secret-map "auth-token-value")
+                                           secret/value->string))
           pinot-tables (response :tables)]
       {:tables (set (for [table-name pinot-tables]
                       {:schema nil, :name table-name}))})))
+
 
 (defn dbms-version
   "Impl of `driver/dbms-version` for Pinot."
@@ -67,10 +68,10 @@
   {:pre [(map? (:details database))]}
   (ssh/with-ssh-tunnel [details-with-tunnel (:details database)]
     (let [response (pinot.client/GET (pinot.client/details->url details-with-tunnel "/version")
-                          :auth-enabled     (-> database :details :auth-enabled)
-                          :auth-username    (-> database :details :auth-username)
-                          :auth-token-value (-> (:details database)
-                                                (secret/db-details-prop->secret-map "auth-token")
-                                                secret/value->string))
+                     :auth-enabled     (-> database :details :auth-enabled)
+                     :auth-token-type  (-> database :details :auth-token-type)
+                     :auth-token-value (-> (:details database)
+                                           (secret/db-details-prop->secret-map "auth-token-value")
+                                           secret/value->string))
           version (response :pinot-segment-uploader-default)]
       {:version version})))

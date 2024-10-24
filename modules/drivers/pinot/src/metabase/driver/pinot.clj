@@ -24,10 +24,14 @@
   [_ details]
   {:pre [(map? details)]}
   (ssh/with-ssh-tunnel [details-with-tunnel details]
-    (let [{:keys [auth-enabled auth-username auth-token-value]} details]
+    (let [{:keys [auth-enabled auth-token-type auth-token-value]} details
+          headers (if auth-enabled
+                    {"Authorization" (str auth-token-type " " auth-token-value)} ;; Create the Authorization header
+                    {})]
+      ;; Make the GET request with headers properly nested
       (= 200 (:status (http/get (pinot.client/details->url details-with-tunnel "/health")
-                                (cond-> {}
-                                  auth-enabled (assoc :basic-auth (str auth-username ":" auth-token-value)))))))))
+                                {:headers headers})))))) ;; The headers are now in a :headers map
+
 
 (defmethod driver/describe-table :pinot
   [_ database table]
