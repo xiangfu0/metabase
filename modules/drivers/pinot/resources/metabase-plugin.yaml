@@ -31,11 +31,19 @@ driver:
       visible-if:
         auth-enabled: true
     - name: auth-token-value
-      display-name: Auth Token
+      display-name: Auth Token Value
       type: secret
       secret-kind: password
       visible-if:
         auth-enabled: true
+    - name: query-options
+      display-name: Query Options
+      type: string
+      default: ""
+      placeholder: "timeoutMs=10000;useMultistageEngine=false;enableNullHandling=false"
+      required: false
+      visible-if:
+        advanced-options: true
     - default-advanced-options
 
 init:

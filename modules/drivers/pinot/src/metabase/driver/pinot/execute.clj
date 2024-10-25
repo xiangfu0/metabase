@@ -105,10 +105,7 @@
 
 (defn execute-reducible-query
   "Execute a query for a Pinot DB."
-  [execute*
-   {{:keys [query]} :native
-    :as                                    mbql-query}
-   respond]
+  [execute* {{:keys [query]} :native :as mbql-query} respond]
   {:pre [query]}
   (let [details    (:details (lib.metadata/database (qp.store/metadata-provider)))
         query      (if (string? query)

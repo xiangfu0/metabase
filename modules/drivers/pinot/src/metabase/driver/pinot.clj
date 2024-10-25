@@ -53,11 +53,12 @@
   (let [parsed (if (string? query)
                  (json/parse-string query keyword)
                  query)]
-    (assoc-in parsed [:context :timeout] timeout)))
+    (assoc-in parsed [:queryOptions :timeoutMs] timeout)))
 
 (defmethod driver/execute-reducible-query :pinot
   [_driver query _context respond]
    (log/debugf "Executing reducible Pinot query: %s" query)
+
   (pinot.execute/execute-reducible-query
    (partial pinot.client/do-query-with-cancellation qp.pipeline/*canceled-chan*)
    (update-in query [:native :query] add-timeout-to-query qp.pipeline/*query-timeout-ms*)

@@ -3,6 +3,7 @@
    [cheshire.core :as json]
    [clj-http.client :as http]
    [clojure.core.async :as a]
+   [clojure.string :as str]
    [metabase.models.secret :as secret]
    [metabase.query-processor.error-type :as qp.error-type]
    [metabase.util :as u]
@@ -64,26 +65,68 @@
 (def ^{:arglists '([url & {:as options}]), :style/indent [:form]} POST   "Execute a POST request."   (partial do-request http/post))
 (def ^{:arglists '([url & {:as options}]), :style/indent [:form]} DELETE "Execute a DELETE request." (partial do-request http/delete))
 
+(defn parse-value
+  "Convert string values to appropriate types (boolean, number, or string)."
+  [value]
+  (cond
+    (re-matches #"(?i)true|false" value) (Boolean/parseBoolean value)
+    (re-matches #"\d+" value) (Integer/parseInt value)
+    :else value))
+
+(defn parse-query-options
+  "Parse a semicolon-separated string of query options into a map with keyword keys and correctly-typed values."
+  [options-str]
+  (->> (str/split options-str #";")
+       (map #(str/split % #"="))
+       (map (fn [[k v]] [(keyword k) (parse-value v)]))
+       (into {})))
+(defn stringify-value
+  "Convert values to string format for query options."
+  [value]
+  (cond
+    (boolean? value) (if value "true" "false")
+    :else (str value)))
+
+(defn map->query-options
+  "Convert a map of query options into a semicolon-separated string."
+  [options-map]
+  (->> options-map
+       (map (fn [[k v]] (str (name k) "=" (stringify-value v))))
+       (str/join ";")))
+
+;; Example usage in your do-query function
 (defn do-query
-  "Run a Pinot `query` against database connection `details`."
+  "Run a Pinot `query` against the database connection `details`."
   [details query]
   {:pre [(map? details) (map? query)]}
   (ssh/with-ssh-tunnel [details-with-tunnel details]
     (try
-      ;; Use the POST helper function to send the Pinot query
-      (let [url (details->url details-with-tunnel "/sql")
+      ;; Parse query options from string
+      (let [query-options-str (get details :query-options "")
+            query-options-map (parse-query-options query-options-str)
+            existing-options (get query :queryOptions {})
+
+            ;; Merge existing and new query options
+            merged-options (merge existing-options query-options-map)
+
+            ;; Create the enhanced query with merged options
+            enhanced-query (assoc query :queryOptions (map->query-options merged-options))
+
+            ;; Prepare the URL and send the enhanced query
+            url (details->url details-with-tunnel "/sql")
             response (POST url
-                       :body query
+                       :body enhanced-query
                        :auth-enabled     (:auth-enabled details)
                        :auth-token-type  (:auth-token-type details)
                        :auth-token-value (-> details
                                              (secret/db-details-prop->secret-map "auth-token-value")
                                              secret/value->string))]
 
-        ;; Logging query, details, and parsed response
-        (log/debugf "Pinot details: %s, Pinot query: %s, Parsed Pinot response: %s" details query response)
+        ;; Log the query, details, and response
+        (log/debugf "Pinot details: %s, Pinot query: %s, Parsed Pinot response: %s"
+                   details enhanced-query response)
 
-        ;; Return parsed response for post-processing
+        ;; Return the parsed response for further processing
         response)
 
       ;; Handle interrupted queries
