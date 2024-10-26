@@ -44,11 +44,22 @@
 
 (defn- resolve-field
   [field-clause]
-  (let [[_ field-id options] field-clause
-        field-name (if (integer? field-id)
-                     (:name (lib.metadata/field (qp.store/metadata-provider) field-id))
-                     (:name options))]
-    (str "\"" field-name "\"")))
+  (log/debugf "Resolving field clause: %s" field-clause)
+  (if (and (sequential? field-clause) (>= (count field-clause) 2))
+    (let [[_ field-id options] field-clause
+          field-name (cond
+                       (integer? field-id)
+                       (-> (qp.store/metadata-provider)
+                           (lib.metadata/field field-id)
+                           :name)
+
+                       (map? options)
+                       (:name options)
+
+                       :else
+                       (str "unknown-field-" field-id))]
+      (str "\"" field-name "\""))
+    (throw (ex-info "Invalid field clause structure" {:field-clause field-clause}))))
 
 (defn- resolve-value [value-struct]
   (let [[_ value _] value-struct]
@@ -129,24 +140,22 @@
   (let [aggregations (:aggregation original-query)]
     (log/debugf "Processing aggregations: %s" aggregations)
     (let [aggregation-clauses (map (fn [aggregation]
-                                     (let [[_ agg-type options] aggregation
-                                           agg-fields (if (vector? agg-type) (second agg-type) nil)
-                                           ;; Resolve the fields if present
-                                           agg-fields (if (and agg-fields (sequential? agg-fields))
-                                                        (map resolve-field agg-fields)
-                                                        agg-fields)
-                                           agg-type (if (vector? agg-type) (first agg-type) agg-type)
+                                     (let [[_ agg-func options] aggregation
+                                           agg-type (first agg-func)
+                                           agg-fields (map resolve-field (subvec agg-func 1))
                                            agg-name (:name options)]
                                        (log/debugf "Processing aggregation clause: %s, agg-type: %s, agg-fields: %s" aggregation, agg-type, agg-fields)
                                        (let [result (cond
                                                       (= agg-type :count) (str "COUNT(*)" (when agg-name (str " AS " agg-name)))
                                                       (= agg-type :distinctCount) (str "DISTINCTCOUNT(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name)))
+                                                      (= agg-type :distinct) (str "DISTINCT(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name)))
                                                       (= agg-type :sum) (str "SUM(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name)))
                                                       (= agg-type :avg) (str "AVG(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name)))
                                                       (= agg-type :min) (str "MIN(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name)))
                                                       (= agg-type :max) (str "MAX(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name)))
                                                       (= agg-type :percentile) (let [[field percentile] agg-fields]
                                                                                (str "PERCENTILE(" field ", " percentile ")" (when agg-name (str " AS " agg-name))))
+
                                                       :else (str (u/upper-case-en (str agg-type)) "(" (str/join ", " agg-fields) ")" (when agg-name (str " AS " agg-name))))]
                                          (log/debugf "Generated aggregation clause: %s" result)
                                          result)))
