@@ -66,20 +66,26 @@
 (def ^{:arglists '([url & {:as options}]), :style/indent [:form]} DELETE "Execute a DELETE request." (partial do-request http/delete))
 
 (defn parse-value
-  "Convert string values to appropriate types (boolean, number, or string)."
+  "Parse value to appropriate type (e.g., number, boolean, or string)."
   [value]
   (cond
-    (re-matches #"(?i)true|false" value) (Boolean/parseBoolean value)
-    (re-matches #"\d+" value) (Integer/parseInt value)
-    :else value))
+    (nil? value) nil
+    (re-matches #"^-?\d+(\.\d+)?$" value) (read-string value)  ; Parse numbers
+    (= "true" value) true
+    (= "false" value) false
+    :else value))  ; Leave as string
 
 (defn parse-query-options
   "Parse a semicolon-separated string of query options into a map with keyword keys and correctly-typed values."
   [options-str]
-  (->> (str/split options-str #";")
-       (map #(str/split % #"="))
-       (map (fn [[k v]] [(keyword k) (parse-value v)]))
-       (into {})))
+  (if (or (nil? options-str) (empty? options-str))
+    {}  ; Return an empty map if the input is nil or empty
+    (->> (str/split options-str #";")
+         (map #(str/split % #"=" 2))  ; Split into key-value pairs safely
+         (filter #(= 2 (count %)))     ; Ensure only valid pairs are processed
+         (map (fn [[k v]] [(keyword (str/trim k)) (parse-value (str/trim v))]))
+         (into {}))))
+
 (defn stringify-value
   "Convert values to string format for query options."
   [value]
